@@ -86,7 +86,10 @@ $(function() {
         //Handler for "Click" on movie times
         $("#output ul li").last().click(function() {
           userTicket.time = $(this).text();
-          $("#price").text(userTicket.price());
+          //If price is currently calculable, calculate and display price:
+          if (userTicket.price()) {
+            $("#price").text(userTicket.price());
+          }
         });
       }
     });
@@ -94,6 +97,7 @@ $(function() {
   //Handler which updates age whenever user changes age field.
   $("input#age").keyup(function() {
     userTicket.age = parseInt($("input#age").val());
+    //If price is currently calculable, calculate and display price:
     if (userTicket.price()) {
       $("#price").text(userTicket.price());
     }
