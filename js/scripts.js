@@ -8,6 +8,10 @@ var moviesBackend = [
   ["Get Out", ["4:45PM","7:00PM","9:15PM"], "second", false]
 ];
 
+function Theater(movies) {
+  this.movies = movies;
+}
+
 function Movie(title, showtimes, run, threeD) {
   this.title     = title;
   this.showtimes = showtimes;
@@ -29,10 +33,29 @@ function parseTime() {
 
 }
 
+var defaultTheatre = new Theater([]);
+
+for (var i = 0; i < moviesBackend.length; i++) {
+  var newMovie = new Movie(
+      moviesBackend[i][0],
+      moviesBackend[i][1],
+      moviesBackend[i][2],
+      moviesBackend[i][3]);
+  defaultTheatre.movies.push(newMovie);
+}
+
+console.log(defaultTheatre);
+
 /// User Interface Logic ///
 $(function() {
-  for (var i = 0; i < moviesBackend.length; i++) {
-    var newMovie = new Movie(moviesBackend[i][0], moviesBackend[i][1], moviesBackend[i][2], moviesBackend[i][3]);
-    $("ul#movie-list").append("<li>" + newMovie.title + "</li>");
+  for (var i = 0; i < defaultTheatre.movies.length; i++) {
+    $("ul#movie-list").append("<li id='" + i + "'>" + defaultTheatre.movies[i].title + "</li>");
+    $("ul#movie-list li#" + i).click(function() {
+      $("#output h3").text(defaultTheatre.movies[$(this)[0].id].title);
+      $("#output ul").empty();
+      for (var i = 0; i < defaultTheatre.movies[$(this)[0].id].showtimes.length; i++) {
+        $("#output ul").append("<li>" + defaultTheatre.movies[$(this)[0].id].showtimes[i] + "</li>")
+      }
+    });
   }
 });
