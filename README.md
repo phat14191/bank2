@@ -8,6 +8,12 @@ All showings before 6pm are Matinees = $5.00 per person
 All showings after 6pm are General Admission = $7.00 per person
 Children under 11, Seniors 62 and over, Military and Student with ID are all $5.00 per person
 Tuesday screenings are at matinee prices all day long
+General Admission - $7.50
+Matinee (before 5:45pm) - $5.50
+Children - $5.50
+Seniors (60+) - $5.50
+Student (With ID) - $5.50
+Military (With ID) - $5.50
 
 Specs
 Upon page load: populate list of movies depending on list from backend.

@@ -32,6 +32,7 @@ function parseTime() {
 /// User Interface Logic ///
 $(function() {
   for (var i = 0; i < moviesBackend.length; i++) {
-    $("ul#movie-list").append("<li>" + moviesBackend[i][0] + "</li>");
+    var newMovie = new Movie(moviesBackend[i][0], moviesBackend[i][1], moviesBackend[i][2], moviesBackend[i][3]);
+    $("ul#movie-list").append("<li>" + newMovie.title + "</li>");
   }
 });
