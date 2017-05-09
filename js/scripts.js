@@ -19,17 +19,38 @@ function Movie(title, showtimes, run, threeD) {
   this.threeD    = threeD;
 }
 
-function Ticket(title, time, age) {
-  this.title = title;
+function Ticket(title, time, age, id, movie) {
   this.time  = time;
   this.age   = age;
+  this.movie = movie;
 }
 
 Ticket.prototype.price = function () {
-
+ var finalPrice = 0;
+ //Add initial ticket price, based on first/second-run status:
+ if (this.movie.run === "first") {
+   finalPrice += 12;
+ } else if (this.movie.run === "second") {
+   finalPrice += 7.5;
+ }
+ //Adjust price if 3D or nah:
+if (this.movie.threeD) {
+  finalPrice += 5;
+}
+//Adjust price if user is a senior or child:\
+//NOTE: An empty age field is tolerated and defaults to adult ticket prices. This seems like ideal behavior.
+if (this.age < 11 || this.age >= 62) {
+  finalPrice -= 2;
+}
+ //Adjust price if showtime is a matinee:
+ //NOTE: Currently, this allows matinee and senior/child to stack. That's probably not how it works IRL. The change would be simple: implement this adjustment as an elseif to the above.
+ if (Movie.prototype.parseTime(this.time) < 1745) {
+   finalPrice -= 2;
+ }
+ return finalPrice;
 };
 
-Ticket.prototype.parseTime = function(showtime) {
+Movie.prototype.parseTime = function(showtime) {
 var splitTime = showtime.split(":");
 var result = 0;
 if ((showtime[5] === "P" || showtime[4] === "P") && splitTime[0] !== "12") {
@@ -57,7 +78,7 @@ $(function() {
     $("ul#movie-list").append("<li id='" + i + "'>" + defaultTheatre.movies[i].title + "</li>");
     //Handler for "Click" on movie list:
     $("ul#movie-list li#" + i).click(function() {
-      userTicket.title = defaultTheatre.movies[$(this)[0].id].title;
+      userTicket.movie = defaultTheatre.movies[$(this)[0].id];
       $("#output h3").text(defaultTheatre.movies[$(this)[0].id].title);
       $("#output ul").empty();
       for (var ii = 0; ii < defaultTheatre.movies[$(this)[0].id].showtimes.length; ii++) {
@@ -65,8 +86,7 @@ $(function() {
         //Handler for "Click" on movie times
         $("#output ul li").last().click(function() {
           userTicket.time = $(this).text();
-          console.log(userTicket);
-          console.log(Ticket.prototype.parseTime($(this).text()));
+          $("#price").text(userTicket.price());
         });
       }
     });
@@ -74,6 +94,8 @@ $(function() {
   //Handler which updates age whenever user changes age field.
   $("input#age").keyup(function() {
     userTicket.age = parseInt($("input#age").val());
-    console.log(userTicket.age);
+    if (userTicket.price()) {
+      $("#price").text(userTicket.price());
+    }
   });
 });
