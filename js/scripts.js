@@ -29,8 +29,13 @@ Ticket.prototype.price = function () {
 
 };
 
-function parseTime() {
-
+Ticket.prototype.parseTime = function(showtime) {
+var splitTime = showtime.split(":");
+var result = 0;
+if ((showtime[5] === "P" || showtime[4] === "P") && splitTime[0] !== "12") {
+  result += 1200;
+  }
+return result += parseInt(splitTime[0]) * 100 + parseInt(splitTime[1]);
 }
 
 var defaultTheatre = new Theater([]);
@@ -44,18 +49,31 @@ for (var i = 0; i < moviesBackend.length; i++) {
   defaultTheatre.movies.push(newMovie);
 }
 
-console.log(defaultTheatre);
-
 /// User Interface Logic ///
 $(function() {
+  var userTicket = new Ticket();
+  //Fill Movie List
   for (var i = 0; i < defaultTheatre.movies.length; i++) {
     $("ul#movie-list").append("<li id='" + i + "'>" + defaultTheatre.movies[i].title + "</li>");
+    //Handler for "Click" on movie list:
     $("ul#movie-list li#" + i).click(function() {
+      userTicket.title = defaultTheatre.movies[$(this)[0].id].title;
       $("#output h3").text(defaultTheatre.movies[$(this)[0].id].title);
       $("#output ul").empty();
-      for (var i = 0; i < defaultTheatre.movies[$(this)[0].id].showtimes.length; i++) {
-        $("#output ul").append("<li>" + defaultTheatre.movies[$(this)[0].id].showtimes[i] + "</li>")
+      for (var ii = 0; ii < defaultTheatre.movies[$(this)[0].id].showtimes.length; ii++) {
+        $("#output ul").append("<li>" + defaultTheatre.movies[$(this)[0].id].showtimes[ii] + "</li>")
+        //Handler for "Click" on movie times
+        $("#output ul li").last().click(function() {
+          userTicket.time = $(this).text();
+          console.log(userTicket);
+          console.log(Ticket.prototype.parseTime($(this).text()));
+        });
       }
     });
   }
+  //Handler which updates age whenever user changes age field.
+  $("input#age").keyup(function() {
+    userTicket.age = parseInt($("input#age").val());
+    console.log(userTicket.age);
+  });
 });

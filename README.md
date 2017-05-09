@@ -18,3 +18,4 @@ Military (With ID) - $5.50
 Specs
 Upon page load: populate list of movies depending on list from backend.
 User can click a movie in the populated list to see showtimes.
+As user clicks on movies, ages, and showtimes their Ticket object is updated.
