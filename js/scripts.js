@@ -44,16 +44,16 @@ if (this.age < 11 || this.age >= 62) {
 }
  //Adjust price if showtime is a matinee:
  //NOTE: Currently, this allows matinee and senior/child to stack. That's probably not how it works IRL. The change would be simple: implement this adjustment as an elseif to the above.
- if (Movie.prototype.parseTime(this.time) < 1745) {
+ if (this.parseTime() < 1745) {
    finalPrice -= 2;
  }
  return finalPrice;
 };
 
-Movie.prototype.parseTime = function(showtime) {
-var splitTime = showtime.split(":");
+Ticket.prototype.parseTime = function() {
+var splitTime = this.time.split(":");
 var result = 0;
-if ((showtime[5] === "P" || showtime[4] === "P") && splitTime[0] !== "12") {
+if ((this.time[5] === "P" || this.time[4] === "P") && splitTime[0] !== "12") {
   result += 1200;
   }
 return result += parseInt(splitTime[0]) * 100 + parseInt(splitTime[1]);
